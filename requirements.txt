@@ -1,0 +1,8 @@
+requests
+transformers==4.31.0
+websocket-client==1.6.4
+openai
+duckduckgo_search
+torch
+easyocr
+discord.py-self

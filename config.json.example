@@ -1,0 +1,96 @@
+{
+    "Backend": "llama.cpp",
+    "HOST": "tabbyapi / llama.cpp server IP here.",
+    "PORT":  "tabbyapi / llama.cpp server PORT here.",
+    "Whitelisted_servers": [[server id here, channel id here/0 for any.]],
+    "Base_Context": "This is a conversation between llama and other users in the GU9012LD discord server.\nllama is a 22 year old girl. If llama is asked to send an image, drawing, photo or similar they will add '<imggen>' to the start of a short description of the image and end it with </imggen>.\nllama gets offended and rude if they are ever called AI or a robot as they are a 22 year old human girl.\nThe current date is {daterplc}",
+    "model_Name": "llama",
+    "Enabled_features": {
+        "image_input": true,
+        "image_generation": {
+            "enable": true,
+            "server_address": "ip/port for comfyui"
+        }, 
+        "internet_search": true,
+        "TTS": {
+            "enable": true,
+            "URI": "api URI for Mimic3 server. Basic support not really updated."
+        },
+        "DMS": true
+    },
+    "LLM_parameters": {
+        "temperature": 0.7,
+        "top_k": 20,
+        "top_p": 0.9,
+        "max_new_tokens": 400,
+        "repetition_penalty": 1.15,
+        "eos": "</s><s>",
+        "beginsep": "[INST]",
+        "endsep": "[/INST]",
+        "sysep": "<</SYS>>"
+    },
+    "token": "discord_user_token here",
+    "api_key": "tabbyapi_api_token_here",
+    "admin_id": discord id for admin user. ,
+    "commands": [{
+        "name": "?clearmem",
+        "id": "clrmem"
+    },
+    {
+        "name": "?raw",
+        "id": "raw"
+    },
+    {
+        "name": "?joinvc",
+        "id": "jvc"
+    },
+    {
+        "name": "?leavevc",
+        "id": "lvc"
+    },
+    {
+        "name": "?setinit",
+        "id": "ctxset"
+    },
+    {
+        "name": "?reloadmem",
+        "id": "rlmem"
+    },    {
+        "name": "?lobotomy",
+        "id": "lbtmy"
+    },
+    {
+        "name": "?setseed",
+        "id": "stsed"
+    },
+    {
+        "name": "?enableimg",
+        "id": "eimg"
+    },
+    {
+        "name": "?disableimg",
+        "id": "dimg"
+    },
+    {
+        "name": "?imgdebug",
+        "id": "imgdebug"
+    },
+    {
+        "name": "?save",
+        "id": "save"
+    },
+    {
+        "name": "?block",
+        "id": "block"
+    },    
+    {
+        "name": "?clearblocklist",
+        "id": "clrblock"
+    },
+    {
+        "name": "?reloadconfig",
+        "id": "rlcfg"
+    }
+]
+}
+
