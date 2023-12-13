@@ -1,6 +1,6 @@
 
 # MaSSLLaMA-Discord
-Warning before you go further: The code is probably of extremely poor quality.
+Warning before you go further: The code is probably of extremely poor quality. Much of this was written many months ago so most things are handled in a relatively outdated way.
 
 This is a multimodal LLM based Discord 'userbot' that supports image input, image generation, basic internet search and unmaintained and basic TTS.
 It is based around TabbyAPI or llama.cpp's server however it can possibly work with other OpenAI compatible endpoints while in the tabbyapi mode.
@@ -35,13 +35,13 @@ Here are the available commands and their functions:
 - `?clearmem`: Clears the context.
 - `?raw`: Makes messages be sent directly to comfyui when generating images.
 - `?joinvc`: Makes the bot join a voice channel.
-- `?setinit`: Sets the system prompt for the model, format is "?setinit {<*systemprompt*"
+- `?setinit`: Sets the system prompt for the model, format is `?setinit {<*systemprompt*`
 - `?reloadmem`: Reloads the context of the bot from the saved file.
 - `?lobotomy`: Removes the last two messages from the context.
 - `?enableimg`: Enables image generation for the bot.
 - `?disableimg`: Disables image generation for the bot.
 - `?save`: Saves the current context to a file.
-- `?block`: Blocks a user from interacting with the bot. Might or might not work, usage is "?block @user"
+- `?block`: Blocks a user from interacting with the bot. Might or might not work, usage is `?block @user`
 - `?clearblocklist`: Clears the block list.
 - `?reloadconfig`: Reloads the configuration file.
 
