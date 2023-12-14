@@ -1005,7 +1005,7 @@ async def on_message(message):
                 lastmsg = message.content
                 lastmsgd = message
 
-                if message.author.id in blacklist or ignore == True or (len(message.content) > 500 and message.author.id != 174224265241952256):
+                if message.author.id in blacklist or ignore == True or (len(message.content) > config.llm_parameters["input_message_length_limit"] and message.author.id != 174224265241952256):
                     print("Message blocked")
                 else:
                     async with message.channel.typing():

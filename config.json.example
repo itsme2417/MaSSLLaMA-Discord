@@ -11,6 +11,7 @@
             "enable": true,
             "server_address": "ip/port for comfyui"
         }, 
+        "music_generation": false,
         "internet_search": true,
         "TTS": {
             "enable": true,
@@ -27,7 +28,8 @@
         "eos": "</s><s>",
         "beginsep": "[INST]",
         "endsep": "[/INST]",
-        "sysep": "<</SYS>>"
+        "sysep": "<</SYS>>",
+        "input_message_length_limit": 2000
     },
     "token": "discord_user_token here",
     "api_key": "tabbyapi_api_token_here",
