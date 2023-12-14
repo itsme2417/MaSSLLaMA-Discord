@@ -31,7 +31,7 @@ class Config:
 config = Config()
 API_ENDPOINT_URI = f"http://{config.host}:{config.port}/"
 API_KEY = config.api_key 
-MODEL = "jondurbin/airoboros-l2-70b-3.1.2"
+
 TABBY = False
 if config.backend == "tabbyapi":
     TABBY = True
@@ -39,7 +39,6 @@ if TABBY:
     API_ENDPOINT_URI += "v1/completions"
 else: 
     API_ENDPOINT_URI += "completion"
-tokenizer = transformers.AutoTokenizer.from_pretrained(MODEL)
 
 def tokenize(input):
     if TABBY:
