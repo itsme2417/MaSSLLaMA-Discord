@@ -45,7 +45,8 @@ Here are the available commands and their functions:
 - `?clearblocklist`: Clears the block list.
 - `?reloadconfig`: Reloads the configuration file.
 
-##Donations
+## Donations
+
 Patreon: https://www.patreon.com/llama990
 LTC: Le23XWF6bh4ZAzMRK8C9bXcEzjn5xdfVgP
 If you want to mess around with the bot, im currently running it on the following discord server:
