@@ -15,6 +15,8 @@ install the requirements:
 
 rename config.json.example to config.json then change the options as required.
 
+First message received by the bot will be ignored, afterwards it can be used normally by mentioning it.
+
 ## Config File 
 
 Here's a brief explanation of the options in the config file:
@@ -48,6 +50,10 @@ Here are the available commands and their functions:
 ## Donations
 
 Patreon: https://www.patreon.com/llama990
+
 LTC: Le23XWF6bh4ZAzMRK8C9bXcEzjn5xdfVgP
+
+XMR: 46nkUDLzVDrBWUWQE2ujkQVCbWUPGR9rbSc6wYvLbpYbVvWMxSjWymhS8maYdZYk8mh25sJ2c7S93VshGAij3YJhPztvbTb
+
 If you want to mess around with the bot, im currently running it on the following discord server:
 https://discord.gg/zxPCKn859r
