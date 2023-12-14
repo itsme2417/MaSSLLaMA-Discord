@@ -78,7 +78,7 @@ if config.enabled_features['image_input']:
         "Salesforce/blip2-opt-2.7b-coco", torch_dtype=torch.float32)
     device = "cpu"
     model.to(device)
-if config.enabled_features['image_generation']:
+if config.enabled_features['music_generation']:
     musicprocessor = AutoProcessor.from_pretrained("facebook/musicgen-small")
 
     musicmodel = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")
@@ -486,7 +486,7 @@ def internet_search(keywords):
     return endstr
 
 def musicgen(input):
-    if config.enabled_features['image_generation']:
+    if config.enabled_features['music_generation']:
 
         print ("Begin music gen")
         inputs = musicprocessor(
