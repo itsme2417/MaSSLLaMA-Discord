@@ -78,9 +78,10 @@ if config.enabled_features['image_input']:
         "Salesforce/blip2-opt-2.7b-coco", torch_dtype=torch.float32)
     device = "cpu"
     model.to(device)
-musicprocessor = AutoProcessor.from_pretrained("facebook/musicgen-small")
+if config.enabled_features['image_generation']:
+    musicprocessor = AutoProcessor.from_pretrained("facebook/musicgen-small")
 
-musicmodel = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")
+    musicmodel = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")
 serverwhitelist = []
 today = date.today()
 
@@ -485,25 +486,28 @@ def internet_search(keywords):
     return endstr
 
 def musicgen(input):
-    print ("Begin music gen")
-    inputs = musicprocessor(
+    if config.enabled_features['image_generation']:
 
-        text=[input],
+        print ("Begin music gen")
+        inputs = musicprocessor(
 
-        padding=True,
+            text=[input],
 
-        return_tensors="pt",
+            padding=True,
 
-    )
+            return_tensors="pt",
 
-    audio_values = musicmodel.generate(**inputs, do_sample=True, guidance_scale=4, max_new_tokens=350)
-    import scipy
+        )
 
-    sampling_rate = musicmodel.config.audio_encoder.sampling_rate
+        audio_values = musicmodel.generate(**inputs, do_sample=True, guidance_scale=4, max_new_tokens=350)
+        import scipy
 
-    scipy.io.wavfile.write("musicgen_out.wav", rate=sampling_rate, data=audio_values[0, 0].numpy())
-    print("Music written to file")
-    return ";jMUSIC62515"
+        sampling_rate = musicmodel.config.audio_encoder.sampling_rate
+
+        scipy.io.wavfile.write("musicgen_out.wav", rate=sampling_rate, data=audio_values[0, 0].numpy())
+        print("Music written to file")
+        return ";jMUSIC62515"
+    return ""
 
 
 def youtubechk(fstring):
