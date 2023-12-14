@@ -68,8 +68,8 @@ config = Config()
 
 openaiclient = OpenAI(base_url = f"http://{config.host}:{config.port}/v1", api_key=config.api_key,) 
 
-os.environ["NVIDIA_VISIBLE_DEVICES"] = "2" #Change/uncomment as needed. Mostly here for my use as i find it more convenient.
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+#os.environ["NVIDIA_VISIBLE_DEVICES"] = "2" #Change/uncomment as needed. Mostly here for my use as i find it more convenient.
+#os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 if config.enabled_features['image_input']:
     yolo = torch.hub.load("ultralytics/yolov5", "yolov5x")  # or yolov5m
     reader = easyocr.Reader(['ch_sim','en'])
