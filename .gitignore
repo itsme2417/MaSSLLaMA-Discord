@@ -158,3 +158,16 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+output.txt
+package-lock.json
+node_modules/.package-lock.json
+package.json
+.gitignore
+node_modules/.bin/marked
+node_modules/marked/LICENSE.md
+node_modules/marked/marked.min.js
+node_modules/marked/README.md
+node_modules/marked/bin/main.js
+node_modules/marked/bin/marked.js
+node_modules/marked/man/marked.1
+node_modules/marked/man/marked.1.md
