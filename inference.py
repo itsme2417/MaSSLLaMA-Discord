@@ -66,7 +66,7 @@ def tokenize(input):
         )
         return {'length': len(request.json()['tokens']) }
 
-def infer(prmpt, system='', temperature=0.7, username="", sysep="<</SYS>>", modelname="", eos="</s><s>",beginsep="[INST]",endsep="[/INST]", mem=[], few_shot="", max_tokens=250, stopstrings=[], repetition_penalty=1.15, top_p=0.9, top_k=20):
+def infer(prmpt, system='', temperature=0.7, username="", sysep="<</SYS>>", modelname="", eos="</s><s>",beginsep="[INST]",endsep="[/INST]", mem=[], few_shot="", max_tokens=250, stopstrings=[], top_p=0.9, top_k=20):
     content = ''
     memory = mem
     sysp = f"{beginsep} {sysep}\n"+ system + f"\n{sysep}\n" + few_shot
@@ -88,7 +88,6 @@ def infer(prmpt, system='', temperature=0.7, username="", sysep="<</SYS>>", mode
             "n_predict": max_tokens,
             "stream": True,
             "seed": random.randint(1000002406736107, 3778562406736107), #Was acting weird without this
-            "repetition_penalty": repetition_penalty,
             "top_k": top_k,
             "top_p": top_p,
             "stop": [beginsep] + stopstrings,
