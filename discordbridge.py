@@ -106,7 +106,7 @@ history = []
 with open('memory.json', 'r') as f:
     history = json.load(f)
 
-usrlist = ['\n###', '<\s>', '<s>', '[INST]', '[/INST]', '[INST', 'User:']
+usrlist = ['\n###', '<\s>', '<s>', '[INST]', '[/INST]', '[INST', 'User:', '</s>']
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 warnings.filterwarnings("ignore")
 lasttime = round(time.time())
@@ -340,7 +340,7 @@ def imagegen(msg, guild, replyid, imgtoimg):
    
     payload = getsdprompts(replyid, imagemem, msg, guild, sdmem, imgtoimg)
     chat_completion = openaiclient.chat.completions.create(model="gpt-4", messages=payload, temperature=0.1, max_tokens=150, stop=["</s>","###"])
-
+    
     imagemaking = True
     if raw:
         tosend = msg
@@ -734,7 +734,7 @@ async def run(message, checker, pos):
     msg = ''
     stiem = 0
     stiem = time.perf_counter()
-    gg = infer(f'{replystring}{prompt}',system=contexx.replace('GU9012LD', guild).replace('{daterplc}', f'{today}'),modelname=config.model_name + ":", sysep=config.llm_parameters['sysep'],beginsep=config.llm_parameters['beginsep'],mem= history, max_tokens=config.llm_parameters['max_new_tokens'], stopstrings=usrlist, top_p=config.llm_parameters['top_p'], top_k=config.llm_parameters['top_k'], few_shot="[INST] itsme9316: Generate an anime style drawing of a woman sitting on the edge of a skyscraper, at daytime,\n[/INST] llama: Sure here you go <imggen>anime style drawing woman sitting on edge of skyscraper, daytime</imggen></s><s>\n[INST] itsme9316: Now get me another image similar to that\n[/INST] llama: Here you go: <imggen>anime style drawing woman sitting on edge of skyscraper, daytime</imggen></s><s>")
+    gg = infer(f'{replystring}{prompt}',system=contexx.replace('GU9012LD', guild).replace('{daterplc}', f'{today}'),modelname=config.model_name + ":", bsysep=config.llm_parameters['bsysep'],esysep=config.llm_parameters['esysep'],beginsep=config.llm_parameters['beginsep'],endsep=config.llm_parameters['endsep'],mem= history, max_tokens=config.llm_parameters['max_new_tokens'], stopstrings=usrlist, top_p=config.llm_parameters['top_p'], top_k=config.llm_parameters['top_k'], few_shot=f"{config.llm_parameters['beginsep']} itsme9316: Generate an anime style drawing of a woman sitting on the edge of a skyscraper, at daytime,\n{config.llm_parameters['endsep']} llama: Sure here you go <imggen>anime style drawing woman sitting on edge of skyscraper, daytime</imggen>{config.llm_parameters['eos']}\n{config.llm_parameters['beginsep']} itsme9316: Now get me another image similar to that\n{config.llm_parameters['endsep']} llama: Here you go: <imggen>anime style drawing woman sitting on edge of skyscraper, daytime</imggen>{config.llm_parameters['eos']}")
     history = gg[1]
     fmsg = gg[0]
     odata = fmsg
