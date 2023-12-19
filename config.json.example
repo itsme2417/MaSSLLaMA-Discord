@@ -24,11 +24,11 @@
         "top_k": 20,
         "top_p": 0.9,
         "max_new_tokens": 400,
-        "repetition_penalty": 1.15,
         "eos": "</s><s>",
         "beginsep": "[INST]",
         "endsep": "[/INST]",
-        "sysep": "<</SYS>>",
+        "bsysep": "<</SYS>>",
+        "esysep": "",
         "input_message_length_limit": 2000
     },
     "token": "discord_user_token here",
