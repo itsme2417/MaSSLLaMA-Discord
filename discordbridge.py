@@ -97,14 +97,17 @@ contexx = basecontexx
 def remove_unicode(string):
     nm = ''.join(filter(lambda c: ord(c) < 128, string))
     if nm == '':
-        nm = f'shitunicodename{randrange(1, 4000)}'
+        nm = f'unicodename{randrange(1, 4000)}'
     return nm
 
 
 history = []
-
-with open('memory.json', 'r') as f:
-    history = json.load(f)
+try:
+    with open(os.path.join(script_dir, 'memory.json'), 'r') as f:
+        history = json.load(f)
+except:
+    with open('memory.json', 'w') as f:
+        json.dump(history, f)
 
 usrlist = ['\n###', '<\s>', '<s>', '[INST]', '[/INST]', '[INST', 'User:', '</s>']
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
