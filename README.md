@@ -16,7 +16,7 @@ install the requirements:
 rename config.json.example to config.json then change the options as required.
 
 First message received by the bot will be ignored, afterwards it can be used normally by mentioning it.
-
+Internet searching is triggered by the words "search", "look up" or "internet".
 ## Config File 
 
 Here's a brief explanation of the options in the config file:
@@ -25,6 +25,8 @@ Here's a brief explanation of the options in the config file:
 - `HOST` and `PORT`: The IP address and port of the backend.
 - `Whitelisted_servers`: A list of servers and channels where the bot is allowed to operate. The format is `[server id, channel id/0 for any]`.
 - `Base_Context`: The system prompt for the model. `GU912LD` will be replaced for the discord guild name, while `{daterplc}` will be replaced with the current date.
+- `reserve_space`: Reserves an amount of tokens equivalent to max_new_tokens in the context.
+- `max_seq_len`: The maximum sequence length.
 - `model_Name`: The username of the model.
 - `token`: The Discord user token.
 - `api_key`: The API token for the TabbyAPI server.
