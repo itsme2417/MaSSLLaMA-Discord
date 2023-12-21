@@ -618,8 +618,7 @@ async def run(message, checker, pos):
     foundobj = ''
     msgqueue[pos + 1] = True
     fstring = message.content
-    fstring = fstring.replace('<@204004205998899211> ',
-                              '').replace('<@204004205998899211>', '')
+    fstring = fstring.replace(f'<@{client.user.id}>', '')
     raw_image = ''
     try:
         fstring = youtubechk(fstring)
