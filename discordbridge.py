@@ -106,7 +106,7 @@ try:
     with open(os.path.join(script_dir, 'memory.json'), 'r') as f:
         history = json.load(f)
 except:
-    with open('memory.json', 'w') as f:
+    with open(os.path.join(script_dir, 'memory.json'), 'w') as f:
         json.dump(history, f)
 
 usrlist = ['\n###', '<\s>', '<s>', '[INST]', '[/INST]', '[INST', 'User:', '</s>']
