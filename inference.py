@@ -25,6 +25,8 @@ class Config:
         self.adminid = config['admin_id']
         self.token = config['token']
         self.api_key = config['api_key']
+        self.ctxlen = config['max_seq_len']
+        self.reservespace = config['reserve_space']
 
         print("Loaded config")
 
@@ -74,7 +76,10 @@ def infer(prmpt, system='', temperature=0.7, username="", bsysep="<</SYS>>", esy
 
     print(f"Token count: {tokenize(prompt)['length']}")
     removal = 0
-    while tokenize(prompt)['length'] + max_tokens > 4000 and len(memory) > 2:
+    reserved_space = max_tokens
+    if not config.reservespace:
+        reserved_space = 0
+    while tokenize(prompt)['length'] + reserved_space > config.ctxlen and len(memory) > 2:
         print(f"Removing old memories: Pass:{removal}")
         removal+=1
         memory = memory[removal:]

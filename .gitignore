@@ -171,3 +171,4 @@ node_modules/marked/bin/main.js
 node_modules/marked/bin/marked.js
 node_modules/marked/man/marked.1
 node_modules/marked/man/marked.1.md
+memory.json
