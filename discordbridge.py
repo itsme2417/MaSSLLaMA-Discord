@@ -72,7 +72,7 @@ openaiclient = OpenAI(base_url = f"http://{config.host}:{config.port}/v1", api_k
 #os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 if config.enabled_features['image_input']:
     yolo = torch.hub.load("ultralytics/yolov5", "yolov5x")  # or yolov5m
-    reader = easyocr.Reader(['ch_sim','en'])
+    reader = easyocr.Reader(['en'])
     processor = AutoProcessor.from_pretrained("Salesforce/blip2-opt-2.7b-coco")
     model = Blip2ForConditionalGeneration.from_pretrained(
         "Salesforce/blip2-opt-2.7b-coco", torch_dtype=torch.float32)
@@ -109,7 +109,7 @@ except:
     with open(os.path.join(script_dir, 'memory.json'), 'w') as f:
         json.dump(history, f)
 
-usrlist = ['\n###', '<\s>', '<s>', '[INST]', '[/INST]', '[INST', 'User:', '</s>']
+usrlist = ['\n###', '<\s>', '<s>', '[INST]', '[/INST]', '[INST', 'User:', '</s>', '<|im_end|>']
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 warnings.filterwarnings("ignore")
 lasttime = round(time.time())
@@ -342,7 +342,7 @@ def imagegen(msg, guild, replyid, imgtoimg):
     sample = "1. standing white Persian cat, filmed with a Canon EOS R6, 70-200mm lens, high quality\n2. standing white Persian cat, photo, filmed with a Canon EOS R6, 70-200mm lens, high quality"
    
     payload = getsdprompts(replyid, imagemem, msg, guild, sdmem, imgtoimg)
-    chat_completion = openaiclient.chat.completions.create(model="gpt-4", messages=payload, temperature=0.1, max_tokens=150, stop=["</s>","###"])
+    chat_completion = openaiclient.chat.completions.create(model="gpt-4", messages=payload, temperature=0.1, max_tokens=150, stop=usrlist)
     
     imagemaking = True
     if raw:
@@ -463,7 +463,7 @@ def internet_search(keywords):
                     "role": "user"
                     }
             ]
-        chat_completion = openaiclient.chat.completions.create(model="gpt-3.5-turbo", messages=payload, temperature=0.1, max_tokens=100, stop=["</s>","###"])
+        chat_completion = openaiclient.chat.completions.create(model="gpt-3.5-turbo", messages=payload, temperature=0.1, max_tokens=100, stop=usrlist)
 
         rfn = chat_completion.choices[0].message.content
         print(rfn)
@@ -732,11 +732,11 @@ async def run(message, checker, pos):
     if re.search(r"<:\w+:\d+>", messagef) or re.search(r"<.:\w+:\d+>", messagef):
         messagef = re.sub(r":\d+>", '', messagef).replace("<a:", '').replace("<:",'')
 
-    prompt = f'{tempmessagef}{name}: {messagef}'
+    prompt = f'{tempmessagef}{name}:\n{messagef}'
     msg = ''
     stiem = 0
     stiem = time.perf_counter()
-    gg = infer(f'{replystring}{prompt}',system=contexx.replace('GU9012LD', guild).replace('{daterplc}', f'{today}'),modelname=config.model_name + ":", bsysep=config.llm_parameters['bsysep'],esysep=config.llm_parameters['esysep'],beginsep=config.llm_parameters['beginsep'],endsep=config.llm_parameters['endsep'],mem= history, max_tokens=config.llm_parameters['max_new_tokens'], stopstrings=usrlist, top_p=config.llm_parameters['top_p'], top_k=config.llm_parameters['top_k'], few_shot=f"{config.llm_parameters['beginsep']} itsme9316: Hello\n{config.llm_parameters['endsep']} llama: Hello! How are you?{config.llm_parameters['eos']}\n{config.llm_parameters['beginsep']} itsme9316: Generate an anime style drawing of a woman sitting on the edge of a skyscraper, at daytime,\n{config.llm_parameters['endsep']} llama: Sure here you go <imggen>anime style drawing woman sitting on edge of skyscraper, daytime</imggen>{config.llm_parameters['eos']}\n{config.llm_parameters['beginsep']} itsme9316: Now get me another image similar to that\n{config.llm_parameters['endsep']} llama: Here you go: <imggen>anime style drawing woman sitting on edge of skyscraper, daytime</imggen>{config.llm_parameters['eos']}")
+    gg = infer(f'{replystring}{prompt}',system=contexx.replace('GU9012LD', guild).replace('{daterplc}', f'{today}'),modelname=config.model_name + ":", bsysep=config.llm_parameters['bsysep'],esysep=config.llm_parameters['esysep'],beginsep=config.llm_parameters['beginsep'],endsep=config.llm_parameters['endsep'],mem= history, max_tokens=config.llm_parameters['max_new_tokens'], stopstrings=usrlist, top_p=config.llm_parameters['top_p'], top_k=config.llm_parameters['top_k'], few_shot=f"{config.llm_parameters['beginsep']}itsme9316:\nHello{config.llm_parameters['endsep']}\n{config.llm_parameters['beginsep']}llama:\nHello! How are you?{config.llm_parameters['eos']}{config.llm_parameters['endsep']}\n{config.llm_parameters['beginsep']}itsme9316:\nIm good, please generate an anime style drawing of a woman sitting on the edge of a skyscraper, at daytime,{config.llm_parameters['endsep']}\n{config.llm_parameters['beginsep']}llama:\nSure here you go <imggen>anime style drawing woman sitting on edge of skyscraper, daytime</imggen>{config.llm_parameters['eos']}{config.llm_parameters['endsep']}\n{config.llm_parameters['beginsep']}itsme9316:\nNow get me another image similar to that{config.llm_parameters['endsep']}\n{config.llm_parameters['beginsep']}llama:\nHere you go: <imggen>anime style drawing woman sitting on edge of skyscraper, daytime</imggen>{config.llm_parameters['eos']}{config.llm_parameters['endsep']}")
     history = gg[1]
     fmsg = gg[0]
     odata = fmsg

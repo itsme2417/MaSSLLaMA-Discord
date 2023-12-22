@@ -71,7 +71,7 @@ def tokenize(input):
 def infer(prmpt, system='', temperature=0.7, username="", bsysep="<</SYS>>", esysep="", modelname="", eos="</s><s>",beginsep="[INST]",endsep="[/INST]", mem=[], few_shot="", max_tokens=250, stopstrings=[], top_p=0.9, top_k=20):
     content = ''
     memory = mem
-    prompt = f"{bsysep}\n"+ system + f"\n{esysep}\n" + few_shot + "".join(memory) + f"\n{beginsep} {username} {prmpt}\n{endsep} {modelname}" 
+    prompt = f"{bsysep}\n"+ system + f"{esysep}\n" + few_shot + "".join(memory) + f"\n{beginsep}{username}{prmpt}{endsep}\n{beginsep}{modelname}\n" 
     #This feels wrong.
 
     print(f"Token count: {tokenize(prompt)['length']}")
@@ -83,7 +83,7 @@ def infer(prmpt, system='', temperature=0.7, username="", bsysep="<</SYS>>", esy
         print(f"Removing old memories: Pass:{removal}")
         removal+=1
         memory = memory[removal:]
-        prompt = f"{bsysep}\n"+ system + f"\n{esysep}\n" + few_shot + "".join(memory) + f"\n{beginsep} {username} {prmpt}\n{endsep} {modelname}" 
+        prompt = f"{bsysep}\n"+ system + f"{esysep}\n" + few_shot + "".join(memory) + f"\n{beginsep}{username}\n{prmpt}{endsep}\n{beginsep}{modelname}\n" 
 
     payload = {
             "prompt": prompt,
