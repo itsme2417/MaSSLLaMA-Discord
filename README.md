@@ -38,7 +38,7 @@ Here are the available commands and their functions:
 
 - `?clearmem`: Clears the context.
 - `?raw`: Makes messages be sent directly to comfyui when generating images.
-- `?joinvc`: Makes the bot join a voice channel.
+- `?joinvc`: Makes the bot join a voice channel. For use with TTS.
 - `?setinit`: Sets the system prompt for the model, format is `?setinit {<*systemprompt*`
 - `?reloadmem`: Reloads the context of the bot from the saved file.
 - `?lobotomy`: Removes the last two messages from the context.
