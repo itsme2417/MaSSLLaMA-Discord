@@ -17,7 +17,10 @@
         "internet_search": true,
         "TTS": {
             "enable": true,
-            "URI": "api URI for Mimic3 server. Basic support not really updated."
+            "URI": "URI for openedai-speech / openai compatible tts endpoint. (/v1/audio/speech). Basic support, untested with openai endpoints.",
+            "model": "tts-1-hd",
+            "voice": "alloy",
+            "speed": "1.0"
         },
         "DMS": true
     },

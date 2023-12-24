@@ -260,6 +260,28 @@ def get_position(bbox, width, height): #Thanks mixtral, works pretty good
     else:
         return "unknown position"
 
+def TTS(input_text, output_file, model=config.enabled_features['TTS']['model'], voice=config.enabled_features['TTS']['voice'], response_format="mp3", speed=config.enabled_features['TTS']['speed']):
+    headers = {
+        "Content-Type": "application/json"
+    }
+    data = {
+        "model": model,
+        "input": input_text,
+        "voice": voice,
+        "response_format": response_format,
+        "speed": speed
+    }
+
+    response = requests.post(config.enabled_features['TTS']['URI'], headers=headers, json=data)
+
+    if response.status_code == 200:
+        with open(output_file, 'wb') as f:
+            f.write(response.content)
+            print(f"File {output_file} has been created.")
+    else:
+        print(f"Failed to create file. Status code: {response.status_code}")
+
+
 async def replier(message, text):
     global lastans
     global globtext
@@ -315,10 +337,7 @@ async def replier(message, text):
         try:
             if voiceclient and config.enabled_features['TTS']['enable']: #ancient feature. Hasnt been touched in months.
                 vcsemp.acquire()
-                x = requests.post(config.enabled_features['TTS']['URI'], text.encode('utf-8'))
-
-                with open('voice.wav', 'wb') as f:
-                    f.write(x.content)
+                TTS(text,'voice.wav')
                 voiceclient.play(discord.FFmpegPCMAudio('./voice.wav'))
                 vcsemp.release()
         except NameError:
