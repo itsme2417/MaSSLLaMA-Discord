@@ -339,6 +339,8 @@ async def replier(message, text):
             if voiceclient and config.enabled_features['TTS']['enable']: #ancient feature. Hasnt been touched in months.
                 vcsemp.acquire()
                 TTS(text,'voice.wav')
+                while voiceclient.is_playing():
+                    pass
                 voiceclient.play(discord.FFmpegPCMAudio('./voice.wav'))
                 vcsemp.release()
         except NameError:
@@ -469,7 +471,7 @@ def llamacpp_img(raw_image):
     params = {
     "prompt": [prompt],
     "temperature": 0.1,
-    "min_p": 0.1,
+    "min_p": 0.05,
     "n_predict": 150,
     "stream": True,
     "seed": -1,
@@ -544,6 +546,15 @@ def internet_search(keywords):
     except Exception:
         print(f"Error: {traceback.format_exc()}")
     return endstr
+
+def find_center(bounding_box):
+    x_min, y_min = bounding_box[0][0], bounding_box[0][1]
+    x_max, y_max = bounding_box[2][0], bounding_box[2][1]
+
+    center_x = (x_min + x_max) / 2
+    center_y = (y_min + y_max) / 2
+
+    return (center_x, center_y)
 
 def musicgen(input):
     if config.enabled_features['music_generation']:
@@ -704,7 +715,7 @@ async def run(message, checker, pos):
                 if not foundobjt == "":
                     foundobj = "Object recognition: " + foundobjt
                 for x in ocrresult:
-                    position = get_position(x[0], width, height)
+                    position = find_center(x[0])
                     ocrTranscriptionT +=  f"'{x[1]}' Position: {position}." + '\n'
                 if not ocrTranscriptionT == "":
                     ocrTranscription = "OCR Output: " + ocrTranscriptionT 
@@ -767,7 +778,7 @@ async def run(message, checker, pos):
             messagef = fstring
 
         if imageoutput != "":
-            messagef += f' <image>Description: {imageoutput}; {ocrTranscription}; {foundobj}</image>'
+            messagef += f' <image>Caption: {imageoutput}; {ocrTranscription}; {foundobj}</image>'
 
         queue += 1
     except Exception:
