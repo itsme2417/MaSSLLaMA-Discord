@@ -8,7 +8,11 @@
     "reserve_space": true,
     "max_seq_len": 4096, 
     "Enabled_features": {
-        "image_input": true,
+        "image_input": {
+            "enable": true,
+            "mode": "backend to use, (blip/llama.cpp)",
+            "URI": "Complete URL for completion endpoint for llama.cpp's server if mode is set to llama.cpp"
+        },
         "image_generation": {
             "enable": true,
             "server_address": "ip/port for comfyui"

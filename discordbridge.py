@@ -70,14 +70,15 @@ openaiclient = OpenAI(base_url = f"http://{config.host}:{config.port}/v1", api_k
 
 #os.environ["NVIDIA_VISIBLE_DEVICES"] = "2" #Change/uncomment as needed. Mostly here for my use as i find it more convenient.
 #os.environ["CUDA_VISIBLE_DEVICES"] = "2"
-if config.enabled_features['image_input']:
+if config.enabled_features['image_input']['enable']:
     yolo = torch.hub.load("ultralytics/yolov5", "yolov5x")  # or yolov5m
     reader = easyocr.Reader(['en'])
-    processor = AutoProcessor.from_pretrained("Salesforce/blip2-opt-2.7b-coco")
-    model = Blip2ForConditionalGeneration.from_pretrained(
-        "Salesforce/blip2-opt-2.7b-coco", torch_dtype=torch.float32)
-    device = "cpu"
-    model.to(device)
+    if config.enabled_features['image_input']['mode'] == 'blip':
+        processor = AutoProcessor.from_pretrained("Salesforce/blip2-opt-2.7b-coco")
+        model = Blip2ForConditionalGeneration.from_pretrained(
+            "Salesforce/blip2-opt-2.7b-coco", torch_dtype=torch.float32)
+        device = "cpu"
+        model.to(device)
 if config.enabled_features['music_generation']:
     musicprocessor = AutoProcessor.from_pretrained("facebook/musicgen-small")
 
@@ -88,7 +89,7 @@ today = date.today()
 seed = -1
 obj = Semaphore()
 vcsemp = Semaphore()
-
+imgsem = Semaphore()
 
 
 basecontexx = config.base_context
@@ -450,6 +451,43 @@ async def CheckMention(fstring, message):
         return fstring
     return fstring
 
+def llamacpp_img(raw_image):
+    
+    # Convert raw image to base64 encoding
+    prebuf = io.BytesIO()
+    raw_image.save(prebuf, format="PNG")
+    raw_image = base64.b64encode(prebuf.getvalue()).decode('utf-8')
+    content = ""
+
+    # Define the API endpoint URL
+    url = config.enabled_features['image_input']['URI']
+
+    # Define the prompt
+    prompt = "[img-0]"
+
+    # Define the parameters
+    params = {
+    "prompt": [prompt],
+    "temperature": 0.1,
+    "min_p": 0.1,
+    "n_predict": 150,
+    "stream": True,
+    "seed": -1,
+    "image_data": [{"data": raw_image, "id": 0}],
+    }
+
+    request = requests.post(url, json=params)
+    for line in request.iter_lines(decode_unicode=True):
+        try:
+            if "data" in line:
+                print(json.loads("".join(line.split("data:")[1:]))['content'], end="", flush=True)    
+                content += json.loads("".join(line.split("data:")[1:]))['content']       
+  
+        except Exception as e:
+            print(e)
+    return content
+
+
 
 def internet_search(keywords):
     endstr = ''
@@ -643,7 +681,7 @@ async def run(message, checker, pos):
         fstring = youtubechk(fstring)
         try:
             image = message.attachments[0].url
-            if (".png?" in image or ".jpg?" in image or ".webp?" in image) and config.enabled_features['image_input']: # Just to be safe.
+            if (".png?" in image or ".jpg?" in image or ".webp?" in image) and config.enabled_features['image_input']['enable']: # Just to be safe.
                 raw_image =  Image.open(requests.get(image, stream=True).raw)
                 width = raw_image.width 
                 height = raw_image.height 
@@ -679,11 +717,16 @@ async def run(message, checker, pos):
                 if sha in blipcache:
                     out = blipcache[sha]
                 else:
-                    inputs = processor(raw_image, return_tensors="pt").to(
-                        torch.device(device), torch.float32)
-                    generated_ids = model.generate(**inputs, max_new_tokens=100)
-                    out = processor.batch_decode(
-                        generated_ids, skip_special_tokens=True)[0].strip()
+                    if config.enabled_features['image_input']['mode'] == 'blip':
+                        inputs = processor(raw_image, return_tensors="pt").to(
+                            torch.device(device), torch.float32)
+                        generated_ids = model.generate(**inputs, max_new_tokens=100)
+                        out = processor.batch_decode(
+                            generated_ids, skip_special_tokens=True)[0].strip()
+                    else:
+                        imgsem.acquire()
+                        out = llamacpp_img(raw_image)
+                        imgsem.release()
                     blipcache[sha] = out
                 imageoutput = out
             elif image.endswith(".pdf"):
@@ -692,7 +735,6 @@ async def run(message, checker, pos):
         except Exception:
             print(traceback.format_exc())
             imageoutput = ""
-        imageoutput = imageoutput[:65]
         fstring = await CheckMention(fstring, message)
         print(
             f'Message from {message.author}: {fstring} with {message.attachments} in {guild}')
