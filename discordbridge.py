@@ -44,6 +44,7 @@ class Config:
         with open(os.path.join(script_dir, 'config.json')) as config_file:
             config = json.load(config_file)
 
+        self.backend = config['Backend']
         self.host = config['HOST']
         self.port = config['PORT']
         self.whitelisted_servers = config['Whitelisted_servers']
@@ -622,7 +623,9 @@ def getllamadesc (dats, messagef, mathjson=False):
             return messagef
         else:
             return messagef + " *Request summary: " + llamadesc + "*"
-
+def send_message(message):
+    response = requests.post(f"http://{config.host}:{config.port}", data={"input": message})
+    return json.loads(response.text)["output"]
 async def run(message, checker, pos):
     start_time = 0
     start_time = time.perf_counter()
@@ -808,10 +811,16 @@ async def run(message, checker, pos):
     msg = ''
     stiem = 0
     stiem = time.perf_counter()
-    gg = infer(f'{replystring}{prompt}',system=contexx.replace('GU9012LD', guild).replace('{daterplc}', f'{today}'),modelname=config.model_name + ":", bsysep=config.llm_parameters['bsysep'],esysep=config.llm_parameters['esysep'],beginsep=config.llm_parameters['beginsep'],endsep=config.llm_parameters['endsep'],mem= history, max_tokens=config.llm_parameters['max_new_tokens'], stopstrings=usrlist, top_p=config.llm_parameters['top_p'], top_k=config.llm_parameters['top_k'], few_shot=f"{config.llm_parameters['beginsep']}itsme9316:\nHello{config.llm_parameters['endsep']}\n{config.llm_parameters['beginsep']}llama:\nHello! How are you?{config.llm_parameters['eos']}{config.llm_parameters['endsep']}\n{config.llm_parameters['beginsep']}itsme9316:\nIm good, please generate an anime style drawing of a woman sitting on the edge of a skyscraper, at daytime,{config.llm_parameters['endsep']}\n{config.llm_parameters['beginsep']}llama:\nSure here you go <imggen>anime style drawing woman sitting on edge of skyscraper, daytime</imggen>{config.llm_parameters['eos']}{config.llm_parameters['endsep']}\n{config.llm_parameters['beginsep']}itsme9316:\nNow get me another image similar to that{config.llm_parameters['endsep']}\n{config.llm_parameters['beginsep']}llama:\nHere you go: <imggen>anime style drawing woman sitting on edge of skyscraper, daytime</imggen>{config.llm_parameters['eos']}{config.llm_parameters['endsep']}")
+    gg = ["",""]
+    if config.backend == "polymind":
+        fmsg = send_message(f'{replystring}{prompt}')
+    else:
+        gg = infer(f'{replystring}{prompt}',system=contexx.replace('GU9012LD', guild).replace('{daterplc}', f'{today}'),modelname=config.model_name + ":", bsysep=config.llm_parameters['bsysep'],esysep=config.llm_parameters['esysep'],beginsep=config.llm_parameters['beginsep'],endsep=config.llm_parameters['endsep'],mem= history, max_tokens=config.llm_parameters['max_new_tokens'], stopstrings=usrlist, top_p=config.llm_parameters['top_p'], top_k=config.llm_parameters['top_k'], few_shot=f"{config.llm_parameters['beginsep']}itsme9316:\nHello{config.llm_parameters['endsep']}\n{config.llm_parameters['beginsep']}llama:\nHello! How are you?{config.llm_parameters['eos']}{config.llm_parameters['endsep']}\n{config.llm_parameters['beginsep']}itsme9316:\nIm good, please generate an anime style drawing of a woman sitting on the edge of a skyscraper, at daytime,{config.llm_parameters['endsep']}\n{config.llm_parameters['beginsep']}llama:\nSure here you go <imggen>anime style drawing woman sitting on edge of skyscraper, daytime</imggen>{config.llm_parameters['eos']}{config.llm_parameters['endsep']}\n{config.llm_parameters['beginsep']}itsme9316:\nNow get me another image similar to that{config.llm_parameters['endsep']}\n{config.llm_parameters['beginsep']}llama:\nHere you go: <imggen>anime style drawing woman sitting on edge of skyscraper, daytime</imggen>{config.llm_parameters['eos']}{config.llm_parameters['endsep']}")
+        fmsg = gg[0]
     history = gg[1]
-    fmsg = gg[0]
+
     odata = fmsg
+
     tiem = time.perf_counter() - stiem
     print('')
     print(f'Datas done, done in: {tiem}')

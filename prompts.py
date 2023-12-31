@@ -12,7 +12,7 @@ def getsdprompts(replyid, imagemem, msg, guild, sdmem, imgtoimg):
                                         "role": "user"
                                         },
                                         {
-                                        "content": "1. standing white Persian cat, filmed with a Canon EOS R6, 70-200mm lens, high quality, 8k\n2. standing white Persian cat, photo, filmed with a Canon EOS R6, 70-200mm lens, high quality, 8k",
+                                        "content": "1. ~*~Photographic~*~ standing white Persian cat, filmed with a Canon EOS R6, 70-200mm lens, high quality, 8k\n2. ~*~Photographic~*~ standing white Persian cat, photo, filmed with a Canon EOS R6, 70-200mm lens, high quality, 8k",
                                         "role": "assistant"
                                         },
                                         {
@@ -20,7 +20,7 @@ def getsdprompts(replyid, imagemem, msg, guild, sdmem, imgtoimg):
                                         "role": "user"
                                         },
                                         {
-                                        "content": "1. gigantic wizard brain, towering over aliens, on alien planet ruined city, tendrils, giant eyeball, scales, (drawing), high quality\n2.gigantic wizard brain, tendrils, (drawing), high quality",
+                                        "content": "1. ~*~Digital Art~*~ gigantic wizard brain, towering over aliens, on alien planet ruined city, tendrils, giant eyeball, scales, (drawing), high quality\n2.  ~*~Digital Art~*~, gigantic wizard brain, tendrils, (drawing), high quality",
                                         "role": "assistant"
                                         },
                                         {
@@ -36,7 +36,7 @@ def getsdprompts(replyid, imagemem, msg, guild, sdmem, imgtoimg):
                                         "role": "user"
                                         },
                                         {
-                                        "content": "1. Frog neighborhood, green pond, trees, rocks, high quality, high quality, filmed with a Canon EOS R6, (photo)\n2.Frog neighborhood, green pond, trees, rocks, high quality, photo, 4k",
+                                        "content": "1. ~*~Photographic~*~ Frog neighborhood, green pond, trees, rocks, high quality, high quality, filmed with a Canon EOS R6, (photo)\n2. ~*~Photographic~*~, Frog neighborhood, green pond, trees, rocks, high quality, photo, 4k",
                                         "role": "assistant"
                                         },
                                         {
@@ -44,7 +44,7 @@ def getsdprompts(replyid, imagemem, msg, guild, sdmem, imgtoimg):
                                         "role": "user"
                                         },
                                         {
-                                        "content": "1. Frog neighborhood, red pond, trees, high quality, high quality, filmed with a Canon EOS R6, (photo)\n2.Frog neighborhood, red pond, trees, high quality, photo, 4k",
+                                        "content": "1.~*~Photographic~*~ Frog neighborhood, red pond, trees, high quality, high quality, filmed with a Canon EOS R6, (photo)\n2. ~*~Photographic~*~, Frog neighborhood, red pond, trees, high quality, photo, 4k",
                                         "role": "assistant"
                                         },                    
                                         {
@@ -52,15 +52,15 @@ def getsdprompts(replyid, imagemem, msg, guild, sdmem, imgtoimg):
                                         "role": "user"
                                         },
                                         {
-                                        "content": "1. Alien Character, 3D Style, (drawing), high quality\n2. Alien Character, 3D, (drawing), high quality",
+                                        "content": "1.~*~3D model~*~ Alien Character, 3D Style, (drawing), high quality\n2. ~*~3D model~*~, Alien Character, 3D, (drawing), high quality",
                                         "role": "assistant"
                                         },                                  
                                         {
-                                        "content": "generate a cartoon mario holding a gun *Request summary: <drawinggen> mario cartoon with gun</drawinggen>*",
+                                        "content": "generate a pixel art mario holding a gun *Request summary: <drawinggen> mario pixelart with gun</drawinggen>*",
                                         "role": "user"
                                         },
                                         {
-                                        "content": "1. Mario holding a gun, high quality, masterpiece, (cartoon)\n2. Super Mario holding a gun, high quality, masterpiece, (cartoon), drawing",
+                                        "content": "1. ~*~Pixel Art~*~ Mario holding a gun, high quality, masterpiece, (pixel art)\n2. ~*~Pixel Art~*~, Super Mario holding a gun, high quality, (pixel art)",
                                         "role": "assistant"
                                         }
                                 ]
