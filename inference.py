@@ -113,9 +113,12 @@ def infer(prmpt, system='', temperature=config.llm_parameters['temperature'], us
     for line in request.iter_lines(decode_unicode=True):
         if line:
             if TABBY:
-                print(json.loads(" ".join(line.split(" ")[1:]))['choices'][0]['text'], end="", flush=True)
+                try:
+                    print(json.loads(" ".join(line.split(" ")[1:]))['choices'][0]['text'], end="", flush=True)
 
-                content += json.loads(" ".join(line.split(" ")[1:]))['choices'][0]['text']
+                    content += json.loads(" ".join(line.split(" ")[1:]))['choices'][0]['text']
+                except json.decoder.JSONDecodeError:
+                    pass
             else:
                 try:
                     if "data" in line:
