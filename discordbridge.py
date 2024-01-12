@@ -395,11 +395,18 @@ def imagegen(msg, guild, replyid, imgtoimg):
             print(f'Prompt: {tosend}')
             tosend = f'{tosend}'
     if not imgtoimg:
-        res = aspect2res(tosend)
+
         imgmk.acquire()
-        x = generate(tosend,config.enabled_features['image_generation']["server_address"] , width=res[0], height=res[1])[0]
-        sdmem[guild] = [tosend, re.sub(r'\\', '', msg)]
-        imgmk.release()
+        try:
+
+            res = aspect2res(tosend)
+            print("Sending prompt to comfyui")
+            x = generate(tosend,config.enabled_features['image_generation']["server_address"] , width=res[0], height=res[1])[0]
+            sdmem[guild] = [tosend, re.sub(r'\\', '', msg)]
+            imgmk.release()
+        except Exception as e:
+            print(e)
+            imgmk.release()
     else: #Not currently functional due to ... comfyui reasons
         pass
         '''print("Performing img2img")
