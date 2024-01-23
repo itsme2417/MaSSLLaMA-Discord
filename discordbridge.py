@@ -395,9 +395,9 @@ def imagegen(msg, guild, replyid, imgtoimg):
             print(f'Prompt: {tosend}')
             tosend = f'{tosend}'
     if not imgtoimg:
-
-        imgmk.acquire()
         try:
+            imgmk.acquire()
+        
 
             res = aspect2res(tosend)
             print("Sending prompt to comfyui")
@@ -407,6 +407,7 @@ def imagegen(msg, guild, replyid, imgtoimg):
         except Exception as e:
             print(e)
             imgmk.release()
+            return None
     else: #Not currently functional due to ... comfyui reasons
         pass
         '''print("Performing img2img")
@@ -429,7 +430,7 @@ def runFLAN(input):
 
 def is_message_allowed(message):
     for server_id, channel_id in config.whitelisted_servers:
-        if server_id == message.guild.id:
+        if server_id == message.guild.id and not message.author.id in blacklist:
             if channel_id == 0 or message.channel.id == channel_id:
                 return True
     return False
@@ -459,6 +460,7 @@ async def CheckMention(fstring, message):
         if [name, x] not in knownusrs and (name != '' and name != ' '):
             knownusrs.append([name, x])
             print(f'appending {name} to DB.')
+            print(knownusrs)
         return fstring
     return fstring
 
@@ -836,7 +838,7 @@ async def run(message, checker, pos):
 
     dats = html.unescape(dats)
     subst = ""
-    regex = r"<.*>.*</.*>"
+    regex = r"<.*>.*</.*>|<.*?im_end.*?>"
     pattern = "<@(.*)>"
     compiled = re.compile(pattern)
 
@@ -845,20 +847,17 @@ async def run(message, checker, pos):
     if ('<imggen>' in dats or ('<editimg>' in dats and raw_image == ''))and enableimg == True and not compiled.search(fstring):
         llamadesc = getllamadesc(dats, messagef)
         try:
-            if replystring != '':
-                dats += f';j6487{imagegen(llamadesc, guildid, message.reference.resolved.id, False)};j6487'
-            else:
-                dats += f';j6487{imagegen(llamadesc, guildid, False, False)};j6487'
-
+            imagegen_result = imagegen(llamadesc, guildid, message.reference.resolved.id if replystring != '' else False, False)
+            if imagegen_result is not None:
+                dats += f';j6487{imagegen_result};j6487'
         except Exception:
             print(traceback.format_exc())
     elif '<editimg>' in dats and enableimg == True and not (raw_image == '') and not compiled.search(fstring):
         llamadesc = getllamadesc(dats, messagef)
         try:
-            if replystring != '':
-                dats += f';j6487{imagegen(llamadesc, guildid, message.reference.resolved.id, raw_image)};j6487'
-            else:
-                dats += f';j6487{imagegen(llamadesc, guildid, False, raw_image)};j6487'
+            imagegen_result = imagegen(llamadesc, guildid, message.reference.resolved.id if replystring != '' else False, raw_image)
+            if imagegen_result is not None:
+                dats += f';j6487{imagegen_result};j6487'
         except Exception:
             print(traceback.format_exc())
     elif '<musicgen>' in dats and enableimg == True and not compiled.search(fstring):
@@ -870,19 +869,17 @@ async def run(message, checker, pos):
     elif re.match(r".*</.*>", dats) and enableimg == True and not compiled.search(fstring):  
         llamadesc = getllamadesc(dats, messagef)
         try:
-            if replystring != '':
-                dats += f';j6487{imagegen(llamadesc, guildid, message.reference.resolved.id, False)};j6487'
-            else:
-                dats += f';j6487{imagegen(llamadesc, guildid, False, False)};j6487'
+            imagegen_result = imagegen(llamadesc, guildid, message.reference.resolved.id if replystring != '' else False, False)
+            if imagegen_result is not None:
+                dats += f';j6487{imagegen_result};j6487'
         except Exception:
             print(traceback.format_exc())      
     elif ("i.imgur" in dats or "imgur.com" in dats or ("<" in dats and "gen" in dats)) and enableimg == True and not compiled.search(fstring):    
         llamadesc = getllamadesc(dats, messagef)
         try:
-            if replystring != '':
-                dats += f';j6487{imagegen(llamadesc, guildid, message.reference.resolved.id, False)};j6487'
-            else:
-                dats += f';j6487{imagegen(llamadesc, guildid, False, False)};j6487'     
+            imagegen_result = imagegen(llamadesc, guildid, message.reference.resolved.id if replystring != '' else False, False)
+            if imagegen_result is not None:
+                dats += f';j6487{imagegen_result};j6487'  
         except Exception:
             print(traceback.format_exc())     
     elif "<mathjson>" in dats:
@@ -927,7 +924,7 @@ async def run(message, checker, pos):
             if x[0].lower() in dats.lower():
                 ptrn = re.compile(re.escape(x[0]), re.IGNORECASE)
                 dats = ptrn.sub(x[1], dats)
-        dats = dats.replace('<blockuser>', '')
+        dats = dats.replace('<blockuser>', '').replace("</blockuser>","")
         globtext = dats + answr
         messag = message
     if queue > 0:

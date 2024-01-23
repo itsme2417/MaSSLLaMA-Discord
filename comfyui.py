@@ -13,6 +13,8 @@ with open(os.path.join(Path(os.path.abspath(__file__)).parent, 'comfyui_workflow
     prompt_text_lcm = json.load(workflow)
 with open(os.path.join(Path(os.path.abspath(__file__)).parent, 'comfyui_workflow_turbovision.json')) as workflow:
     prompt_text_turbovision = json.load(workflow)
+with open(os.path.join(Path(os.path.abspath(__file__)).parent, 'comfyui_workflow_turbovision_stablefast.json')) as workflow:
+    prompt_text_turbovision_stable = json.load(workflow)
 
     
 def queue_prompt(prompt, server_address):
@@ -60,7 +62,7 @@ def get_images(ws, prompt, server_address):
 
 def generate(prmpt, server_address, seed = 0, width = 1024, height = 1024):
   
-    prompt = prompt_text_turbovision 
+    prompt = prompt_text_turbovision_stable 
     prompt["6"]["inputs"]["text"] = prmpt
     if not seed == 0: 
         prompt["3"]["inputs"]["seed"] = seed

@@ -68,7 +68,7 @@ def tokenize(input):
         )
         return {'length': len(request.json()['tokens']) }
 
-def infer(prmpt, system='', temperature=config.llm_parameters['temperature'], username="", bsysep="<</SYS>>", esysep="", modelname="", eos="</s><s>",beginsep="[INST]",endsep="[/INST]", mem=[], few_shot="", max_tokens=250, stopstrings=[], top_p=config.llm_parameters['top_p'], top_k=config.llm_parameters['top_k']):
+def infer(prmpt, system='', temperature=config.llm_parameters['temperature'], username="", bsysep="<</SYS>>", esysep="", modelname="", eos="</s><s>",beginsep="[INST]",endsep="[/INST]", mem=[], few_shot="", max_tokens=250, stopstrings=["</im_end|>"], top_p=config.llm_parameters['top_p'], top_k=config.llm_parameters['top_k']):
     content = ''
     memory = mem
     prompt = f"{bsysep}\n"+ system + f"{esysep}\n" + few_shot + "".join(memory) + f"\n{beginsep}{username}{prmpt}{endsep}\n{beginsep}{modelname}\n" 
@@ -93,6 +93,7 @@ def infer(prmpt, system='', temperature=config.llm_parameters['temperature'], us
             "stream": True,
             "seed": random.randint(1000002406736107, 3778562406736107), #Was acting weird without this
             "top_k": top_k,
+            "temperature_last": True,
             "top_p": top_p,
             "min_p": config.llm_parameters['min_p'],
             "stop": [beginsep] + stopstrings,

@@ -28,7 +28,7 @@
       },
       "4": {
         "inputs": {
-          "ckpt_name": "turbovisionxlV200.safetensors"
+          "ckpt_name": "turbovisionxlV32Fp16.dIUg.safetensors"
         },
         "class_type": "CheckpointLoaderSimple"
       },
